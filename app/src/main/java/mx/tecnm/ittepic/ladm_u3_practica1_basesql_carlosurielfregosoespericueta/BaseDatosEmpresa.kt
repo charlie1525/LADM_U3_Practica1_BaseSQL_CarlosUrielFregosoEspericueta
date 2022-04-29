@@ -4,33 +4,35 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class BaseDatosAreas(context: Context?,
-    name: String?,
-    factory: SQLiteDatabase.CursorFactory?,
-    version: Int)
+class BaseDatosEmpresa(context: Context?,
+                       name: String?,
+                       factory: SQLiteDatabase.CursorFactory?,
+                       version: Int)
     : SQLiteOpenHelper(context, name, factory, version){
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             "create table Area(" +
-                    "IdArea int  primary key autoincrement," +
+                    "IdArea INTEGER  PRIMARY KEY AUTOINCREMENT," +
                     "Descripcion varchar(200)," +
                     "Division varchar(50)," +
-                    "CantidadEmpleados int);"
+                    "CantidadEmpleados int" +
+                    ");"
         ) // fin de la creacion de la primer tabla
 
         db.execSQL(
             "create table Subdepartamento(" +
-                    "IdSubdepto int primary key autoincrement," +
+                    "IdSubdepto INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "IdEdificio varchar(20)," +
                     "Piso varchar(20)," +
-                    "IdArea int references Area(IdArea)"+
+                    "IdArea INTEGER REFERENCES Area(IdArea)"+
                     ");"
         )// fin de la segunda consulta
 
     }
 
-    override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
+    override fun onUpgrade(db: SQLiteDatabase, p1: Int, p2: Int) {
+
     }
 
 }

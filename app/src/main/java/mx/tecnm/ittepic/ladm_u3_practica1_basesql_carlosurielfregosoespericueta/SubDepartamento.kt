@@ -5,88 +5,142 @@ import android.content.Context
 import android.database.sqlite.SQLiteException
 import java.sql.SQLException
 
-class SubDepartamento(main : Context) {
+class SubDepartamento(main : Context?) {
     var idSubdep = 0
     var idEdificio = ""
     var piso = ""
     var idArea = 0
+    var Sdescripcion = ""
+    var Sdivision = ""
     private var error = ""
     private val local = main
 
     // ------------------------ inicio de los métodos -----------------------------------
-    fun insertar(): Boolean {
-        val areas = BaseDatosAreas(local, "Subdepartamento", null, 1)
+    fun insertarPorDivision(divSub: String): Boolean {
+        val departamentos = BaseDatosEmpresa(local, "Subdepartamento", null, 1)
         error = ""
+        val areas = BaseDatosEmpresa(local,"Area",null,1)
+        val areasTabla = areas.readableDatabase
+        val selectQuery = "select a.IdArea from Area as a where Division like ?"
+        val cursor = areasTabla.rawQuery(selectQuery, arrayOf("%${divSub}%"))
+        val areaId = cursor.getInt(0)
         try {
-            val tabla = areas.writableDatabase
+            val tabla = departamentos.writableDatabase
             val datos = ContentValues()
-            datos.put("IdSubdepto", idSubdep)
             datos.put("IdEdificio", idEdificio)
             datos.put("Piso", piso)
-            datos.put("IdArea",idArea)
+            datos.put("IdArea",areaId)
 
-            val res = tabla.insert("Subdepartamento", null, datos)
+            val res = tabla.insert("Subdepartamento", "IdSubdepto", datos)
             if (res == -1L) return false
 
         } catch (err: SQLiteException) {
             this.error = err.message!!
             return false
         } finally {
-            areas.close()
+            departamentos.close()
+        }
+
+        return true
+    }
+    fun insertarPorDescripcion(descSub: String): Boolean {
+        val departamentos = BaseDatosEmpresa(local, "Subdepartamento", null, 1)
+        error = ""
+        val areas = BaseDatosEmpresa(local,"Area",null,1)
+        val areasTabla = areas.readableDatabase
+        val selectQuery = "select a.IdArea from Area as a where Descripcion like ?"
+        val cursor = areasTabla.rawQuery(selectQuery, arrayOf("%${descSub}%"))
+        //val areaId = cursor.getInt(0)
+        try {
+            val tabla = departamentos.writableDatabase
+            val datos = ContentValues()
+            datos.put("IdEdificio", idEdificio)
+            datos.put("Piso", piso)
+            datos.put("IdArea",cursor.getInt(0))
+
+            val res = tabla.insert("Subdepartamento", "IdSubdepto", datos)
+            if (res == -1L) return false
+
+        } catch (err: SQLiteException) {
+            this.error = err.message!!
+            return false
+        } finally {
+            departamentos.close()
         }
 
         return true
     }
 
-    fun mostrarSubDepas(): ArrayList<SubDepartamento> {
+    fun mostrarSubDepas(Edificio : String): ArrayList<SubDepartamento> {
         error = ""
-        val areas = BaseDatosAreas(local, "Subdepartamento", null, 1)
-        val area = ArrayList<SubDepartamento>()
+        val departamentos = BaseDatosEmpresa(local, "Subdepartamento", null, 1)
+        val departamentoArr = ArrayList<SubDepartamento>()
         try {
-            val tabla = areas.readableDatabase
-            val sqlSelect = "select * from Subdepartamento"
-            val cursor = tabla.rawQuery(sqlSelect, null)
+            val tabla = departamentos.readableDatabase
+            val sqlSelect = "select IdEdificio,Piso,IdArea from Subdepartamento where IdEdificio=?"
+            val cursor = tabla.rawQuery(sqlSelect, arrayOf(Edificio))
             if (cursor.moveToFirst()) {
                 do {
-                    val areaIn = SubDepartamento(local)
-                    areaIn.idEdificio = cursor.getString(1)
-                    areaIn.piso = cursor.getString(2)
-                    areaIn.idArea = cursor.getString(3).toInt()
-                    area.add(areaIn)
+                    val subdepaIn = SubDepartamento(local)
+                    subdepaIn.idEdificio = cursor.getString(1)
+                    subdepaIn.piso = cursor.getString(2)
+                    subdepaIn.idArea = cursor.getString(3).toInt()
+                    departamentoArr.add(subdepaIn)
                 } while (cursor.moveToNext())
             }
         } catch (err: SQLiteException) {
             this.error = err.message!!
         } finally {
-            areas.close()
+            departamentos.close()
         }
-        return area
+        return departamentoArr
     }
 
-    fun mostrarSubdepa(division: String): Area {
+    fun mostrarSubdepa(division: String): ArrayList<SubDepartamento> {
         error = ""
-        val areas = BaseDatosAreas(local, "Area", null, 1)
-        val areaIn = Area(local)
+        val departamento = BaseDatosEmpresa(local, "Subdepartamento", null, 1)
+        val departamentoArr = ArrayList<SubDepartamento>()
         try {
-            val tabla = areas.readableDatabase
-            val sqlSelect = "select * from Subdepartamento where IdSubdepto=?"
-            val cursor = tabla.rawQuery(sqlSelect, arrayOf(division))
+            val tabla = departamento.readableDatabase
+            val sqlSelect = "select sd.IdEdificio, sd.Piso, sd.IdArea from Subdepartamento as sd INNER JOIN Area as a on sd.IdArea = a.IdArea where a.Division like ?"
+            val cursor = tabla.rawQuery(sqlSelect, arrayOf("%${division}%"))
             if (cursor.moveToFirst()) {
-                areaIn.descripcion = cursor.getString(1)
-                areaIn.division = cursor.getString(2)
-                areaIn.numEmpleados = cursor.getString(3).toInt()
+               do{
+                   val subdepaIn = SubDepartamento(local)
+                   subdepaIn.idEdificio = cursor.getString(0)
+                   subdepaIn.piso = cursor.getString(1)
+                   subdepaIn.idArea = cursor.getString(2).toInt()
+                   departamentoArr.add(subdepaIn)
+               }while (cursor.moveToNext())
             }
         } catch (err: SQLiteException) {
             this.error = err.message!!
         } finally {
-            areas.close()
+            departamento.close()
         }
-        return areaIn
+        return departamentoArr
+    }
+
+    fun mostrarSubDepaPorDescripcion(descripcion: String): ArrayList<SubDepartamento>{
+        error = ""
+        val subDepa = ArrayList<SubDepartamento>()
+        val departamento = BaseDatosEmpresa(local,"Subdepartamento",null,1)
+
+        try{
+            val tabla = departamento.readableDatabase
+            //val
+        }catch (err: SQLException){
+            this.error = err.message!!
+        }finally {
+            departamento.close()
+        }
+
+        return subDepa
     }
 
     fun actualizar(): Boolean {
         error = ""
-        val areas = BaseDatosAreas(local, "Subdepartamento", null, 1)
+        val areas = BaseDatosEmpresa(local, "Subdepartamento", null, 1)
         try {
             val tabla = areas.writableDatabase
             val update = ContentValues()
@@ -105,7 +159,7 @@ class SubDepartamento(main : Context) {
 
     fun eliminar(): Boolean {
         error = ""
-        val areas =BaseDatosAreas(local,"Area",null,1)
+        val areas =BaseDatosEmpresa(local,"Area",null,1)
         try {
             val tabla = areas.writableDatabase
             val delete = tabla.delete("Area","IdArea=?", arrayOf(idArea.toString()))
