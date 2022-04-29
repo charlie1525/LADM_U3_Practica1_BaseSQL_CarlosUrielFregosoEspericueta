@@ -16,14 +16,14 @@ class BaseDatosAreas(context: Context?,
                     "IdArea int  primary key autoincrement," +
                     "Descripcion varchar(200)," +
                     "Division varchar(50)," +
-                    "CaantidadEmpleados int);"
+                    "CantidadEmpleados int);"
         ) // fin de la creacion de la primer tabla
 
         db.execSQL(
             "create table Subdepartamento(" +
                     "IdSubdepto int primary key autoincrement," +
                     "IdEdificio varchar(20)," +
-                    "Piso varchar(20)." +
+                    "Piso varchar(20)," +
                     "IdArea int references Area(IdArea)"+
                     ");"
         )// fin de la segunda consulta
