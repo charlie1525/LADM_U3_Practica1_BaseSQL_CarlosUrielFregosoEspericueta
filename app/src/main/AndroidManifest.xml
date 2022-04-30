@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LADM_U3_Practica1_BaseSQL_CarlosUrielFregosoEspericueta">
         <activity
+            android:name=".UpdateSubDep"
+            android:exported="false" />
+        <activity
+            android:name=".UpdateArea"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name">

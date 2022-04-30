@@ -8,6 +8,15 @@
     android:padding="20dp"
     tools:context=".ui.home.HomeFragment">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Áreas de la Empresa"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:textColor="@color/black"/>
+
+
     <EditText
         android:id="@+id/txtDesAreaFH"
         android:layout_width="match_parent"
@@ -37,41 +46,18 @@
 
         <Button
             android:id="@+id/btnInsertarFH"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:text="Insertar"
-            android:layout_marginRight="10dp"/>
-
-        <Button
-            android:id="@+id/btnUpdateFH"
-            android:layout_width="130dp"
-            android:layout_height="40dp"
-            android:text="Actualizar"
-            android:layout_marginRight="10dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center">
-
-        <Button
-            android:id="@+id/btnEliminarFH"
             android:layout_width="110dp"
             android:layout_height="40dp"
-            android:text="Eliminar"
-            android:layout_marginRight="20dp"/>
-
+            android:layout_marginRight="10dp"
+            android:text="Insertar" />
 
         <Button
-            android:id="@+id/btnConsultaFH"
-            android:layout_width="100dp"
+            android:id="@+id/btnBuscarFH"
+            android:layout_width="110dp"
             android:layout_height="40dp"
-            android:text="Buscar"/>
+            android:text="Buscar" />
 
     </LinearLayout>
-
     <RadioGroup
         android:id="@+id/RGbotonesBusquedaFH"
         android:layout_width="match_parent"
@@ -81,23 +67,22 @@
         android:orientation="horizontal">
 
         <RadioButton
+            android:id="@+id/rbtnDivisionFH"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Divisíon"
-            android:id="@+id/rbtnDivisionFH"
-            android:layout_marginRight="50dp"/>
+            android:layout_marginRight="50dp"
+            android:text="Divisíon" />
 
         <RadioButton
+            android:id="@+id/rbtnDescripcionFH"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Descripción"
-            android:id="@+id/rbtnDescripcionFH" />
+            android:text="Descripción" />
     </RadioGroup>
 
     <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
         android:id="@+id/lvAreasFH"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>
