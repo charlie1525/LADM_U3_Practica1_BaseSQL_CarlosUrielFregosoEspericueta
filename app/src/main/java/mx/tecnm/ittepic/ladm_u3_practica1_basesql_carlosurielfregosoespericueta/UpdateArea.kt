@@ -16,6 +16,7 @@ class UpdateArea : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityUpdateAreaBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         title = "Actualizacion del área"
         val extraDivision = this.intent.extras!!.getString("divisonExtra")
         val extraDescripcion = this.intent.extras!!.getString("descripcionExtra")
@@ -32,7 +33,8 @@ class UpdateArea : AppCompatActivity() {
             areaIn.descripcion = binding.txtDescUpA.text.toString()
             areaIn.division = binding.txtDivUpA.text.toString()
             areaIn.numEmpleados = binding.txtEmpleadosUpA.text.toString().toInt()
-            AlertDialog.Builder(this).setMessage("${areaIn.idArea},${areaIn.numEmpleados},${areaIn.division},${areaIn.descripcion}").show()
+            //AlertDialog.Builder(this).setMessage("${areaIn.idArea},${areaIn.numEmpleados},${areaIn.division},${areaIn.descripcion}").show()
+
             if(areaIn.actualizar(extraId.toString())){
                 Toast.makeText(this, "Se actualizó correctamente", Toast.LENGTH_SHORT).show()
                 binding.txtDivUpA.setText("")

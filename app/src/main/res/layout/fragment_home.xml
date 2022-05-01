@@ -5,87 +5,100 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp"
+    android:layout_margin="5dp"
     tools:context=".ui.home.HomeFragment"
     android:id="@+id/homeFragment">
-
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:text="Áreas de la Empresa"
-        android:textAlignment="center"
-        android:textSize="20dp"
-        android:textColor="@color/black"
-        android:id="@+id/lblArea"/>
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lblArea"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="Áreas de la Empresa"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="20dp" />
 
 
-    <EditText
-        android:id="@+id/txtDesAreaFH"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Descripción del área:"
-        android:inputType="text" />
+            <EditText
+                android:id="@+id/txtDesAreaFH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Descripción del área:"
+                android:inputType="text" />
 
-    <EditText
-        android:id="@+id/txtDivAreaFH"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Divison del área:"
-        android:inputType="text" />
+            <EditText
+                android:id="@+id/txtDivAreaFH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Divison del área:"
+                android:inputType="text" />
 
-    <EditText
-        android:id="@+id/txtCantEmpFH"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Cantidad de empleados en el área:"
-        android:inputType="number" />
+            <EditText
+                android:id="@+id/txtCantEmpFH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Cantidad de empleados en el área:"
+                android:inputType="number" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
 
-        <Button
-            android:id="@+id/btnInsertarFH"
-            android:layout_width="110dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="10dp"
-            android:text="Insertar" />
+                <Button
+                    android:id="@+id/btnInsertarFH"
+                    android:layout_width="110dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:text="Insertar" />
 
-        <Button
-            android:id="@+id/btnBuscarFH"
-            android:layout_width="110dp"
-            android:layout_height="40dp"
-            android:text="Buscar" />
+                <Button
+                    android:id="@+id/btnBuscarFH"
+                    android:layout_width="110dp"
+                    android:layout_height="40dp"
+                    android:text="Buscar" />
 
-    </LinearLayout>
-    <RadioGroup
-        android:id="@+id/RGbotonesBusquedaFH"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+            </LinearLayout>
 
-        <RadioButton
-            android:id="@+id/rbtnDescripcionFH"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Descripción" />
+            <RadioGroup
+                android:id="@+id/RGbotonesBusquedaFH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/rbtnDivisionFH"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:text="División" />
+                <RadioButton
+                    android:id="@+id/rbtnDescripcionFH"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Descripción" />
 
-    </RadioGroup>
+                <RadioButton
+                    android:id="@+id/rbtnDivisionFH"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:text="División" />
 
+            </RadioGroup>
+
+
+
+        </LinearLayout>
+    </ScrollView>
     <ListView
         android:id="@+id/lvAreasFH"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"/>
 
 </LinearLayout>

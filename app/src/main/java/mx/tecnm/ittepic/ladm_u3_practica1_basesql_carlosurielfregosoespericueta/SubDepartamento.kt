@@ -14,7 +14,7 @@ class SubDepartamento(main: Context?) {
     var idArea = 0
     var Sdescripcion = ""
     var Sdivision = ""
-    private var error = ""
+    var error = ""
     private val local = main
 
     // ------------------------ inicio de los métodos -----------------------------------
@@ -195,7 +195,7 @@ class SubDepartamento(main: Context?) {
         return subdepa
     }
 
-    fun actualizar(): Boolean {
+    fun actualizar(depaId: String): Boolean {
         error = ""
         val areas = BaseDatosEmpresa(local, "Subdepartamento", null, 1)
         try {
@@ -203,13 +203,8 @@ class SubDepartamento(main: Context?) {
             val update = ContentValues()
             update.put("IdEdificio", idEdificio)
             update.put("Piso", piso)
-            update.put("IdArea", idArea)
-            val res = tabla.update(
-                "Subdepartamento",
-                update,
-                "IdSubdepto=?",
-                arrayOf(idSubdep.toString())
-            )
+            val res = tabla.update("Subdepartamento",update,"IdSubdepto=?",arrayOf(depaId))
+            if(res == 0) return false
 
         } catch (err: SQLiteException) {
             this.error = err.message!!
@@ -221,10 +216,11 @@ class SubDepartamento(main: Context?) {
 
     fun eliminar(): Boolean {
         error = ""
-        val areas = BaseDatosEmpresa(local, "Area", null, 1)
+        val areas = BaseDatosEmpresa(local, "Subdepartamento", null, 1)
         try {
             val tabla = areas.writableDatabase
-            val delete = tabla.delete("Area", "IdArea=?", arrayOf(idArea.toString()))
+            val delete = tabla.delete("Subdepartamento", "IdSubdepto=?", arrayOf(idSubdep.toString()))
+            if (delete == 0) return false
         } catch (err: SQLException) {
             this.error = err.message!!
             return false
