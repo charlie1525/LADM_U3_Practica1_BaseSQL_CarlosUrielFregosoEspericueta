@@ -80,7 +80,7 @@ class HomeFragment : Fragment() {
         listaIDsArea.clear()
         repeat((0 until vistaArea.size).count()) {
             val ar = vistaArea[it]
-            nombreAreas.add(ar.descripcion)
+            nombreAreas.add("${ar.descripcion}, ${ar.division}")
             listaIDsArea.add(ar.idArea)
         }
         binding.lvAreasFH.adapter =

@@ -48,10 +48,10 @@ class Area(main: Context?) {
             if (cursor.moveToFirst()) {
                 do {
                     val areaIn = Area(local)
-                    areaIn.idArea = cursor.getString(0).toInt()
+                    areaIn.idArea = cursor.getInt(0)
                     areaIn.descripcion = cursor.getString(1)
                     areaIn.division = cursor.getString(2)
-                    areaIn.numEmpleados = cursor.getString(3).toInt()
+                    areaIn.numEmpleados = cursor.getInt(3)
                     area.add(areaIn)
                 } while (cursor.moveToNext())
             }
