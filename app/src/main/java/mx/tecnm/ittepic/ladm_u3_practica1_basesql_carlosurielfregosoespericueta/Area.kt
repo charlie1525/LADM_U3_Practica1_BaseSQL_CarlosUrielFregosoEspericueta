@@ -48,6 +48,7 @@ class Area(main: Context?) {
             if (cursor.moveToFirst()) {
                 do {
                     val areaIn = Area(local)
+                    areaIn.idArea = cursor.getString(0).toInt()
                     areaIn.descripcion = cursor.getString(1)
                     areaIn.division = cursor.getString(2)
                     areaIn.numEmpleados = cursor.getString(3).toInt()
@@ -68,16 +69,17 @@ class Area(main: Context?) {
         val areaArr = ArrayList<Area>()
         try {
             val tabla = areas.readableDatabase
-            val sqlSelect = "select * from Area where Division like ?"
+            val sqlSelect = "select * from Area where Division like?"
             val cursor = tabla.rawQuery(sqlSelect, arrayOf("%${division}%"))
             if (cursor.moveToFirst()) {
-                do{
+                do {
                     val areaIn = Area(local)
+                    areaIn.idArea = cursor.getInt(0)
                     areaIn.descripcion = cursor.getString(1)
                     areaIn.division = cursor.getString(2)
-                    areaIn.numEmpleados = cursor.getString(3).toInt()
+                    areaIn.numEmpleados = cursor.getInt(3)
                     areaArr.add(areaIn)
-                }while(cursor.moveToNext())
+                } while (cursor.moveToNext())
             }
         } catch (err: SQLiteException) {
             this.error = err.message!!
@@ -87,18 +89,19 @@ class Area(main: Context?) {
         return areaArr
     }
 
-    fun mostrarAreaPorDescripcion(descripcion: String): Area {
+    fun mostrarAreaPorDescripcion(Descripcion: String): Area {
         error = ""
         val areas = BaseDatosEmpresa(local, "Area", null, 1)
         val areaIn = Area(local)
         try {
             val tabla = areas.readableDatabase
-            val sqlSelect = "select * from Area where Descripcion Like ?"
-            val cursor = tabla.rawQuery(sqlSelect, arrayOf("%${descripcion}%"))
+            val sqlSelect = "select * from Area where Descripcion like?"
+            val cursor = tabla.rawQuery(sqlSelect, arrayOf("%$Descripcion%"))
             if (cursor.moveToFirst()) {
+                areaIn.idArea = cursor.getLong(0).toInt()
                 areaIn.descripcion = cursor.getString(1)
                 areaIn.division = cursor.getString(2)
-                areaIn.numEmpleados = cursor.getString(3).toInt()
+                areaIn.numEmpleados = cursor.getInt(3)
             }
         } catch (err: SQLiteException) {
             this.error = err.message!!
@@ -108,15 +111,40 @@ class Area(main: Context?) {
         return areaIn
     }
 
-    fun actualizar(): Boolean {
+
+    fun mostrarAreaPorId(IdArea: String): Area {
+        error = ""
+        val areas = BaseDatosEmpresa(local, "Area", null, 1)
+        val areaIn = Area(local)
+        try {
+            val tabla = areas.readableDatabase
+            val consulta = "select * from Area where IdArea=?"
+            val cursor = tabla.rawQuery(consulta, arrayOf(IdArea))
+            if (cursor.moveToFirst()) {
+                areaIn.idArea = cursor.getLong(0).toInt()
+                areaIn.descripcion = cursor.getString(1)
+                areaIn.division = cursor.getString(2)
+                areaIn.numEmpleados = cursor.getLong(3).toInt()
+            }
+        } catch (err: SQLiteException) {
+            this.error = err.message!!
+        } finally {
+            areas.close()
+        }
+        return areaIn
+    }
+
+    fun actualizar(idAreaAc: String): Boolean {
         error = ""
         val areas = BaseDatosEmpresa(local, "Area", null, 1)
         try {
             val tabla = areas.writableDatabase
             val update = ContentValues()
+            update.put("Descripcion", descripcion)
             update.put("Division", division)
             update.put("CantidadEmpleados", numEmpleados)
-            val res = tabla.update("Area", update, "IdArea=?", arrayOf(idArea.toString()))
+            val res = tabla.update("Area", update, "IdArea=?", arrayOf(idAreaAc))
+            if (res == 0) return false
 
         } catch (err: SQLiteException) {
             this.error = err.message!!
@@ -126,16 +154,18 @@ class Area(main: Context?) {
         return true
     }
 
+
     fun eliminar(): Boolean {
         error = ""
-        val areas =BaseDatosEmpresa(local,"Area",null,1)
+        val areas = BaseDatosEmpresa(local, "Area", null, 1)
         try {
             val tabla = areas.writableDatabase
-            val delete = tabla.delete("Area","IdArea=?", arrayOf(idArea.toString()))
-        }catch (err: SQLException){
+            val delete = tabla.delete("Area", "IdArea=?", arrayOf(idArea.toString()))
+            if (delete == 0) return false
+        } catch (err: SQLException) {
             this.error = err.message!!
             return false
-        }finally {
+        } finally {
             areas.close()
         }
         return true

@@ -16,7 +16,7 @@ class BaseDatosEmpresa(context: Context?,
                     "IdArea INTEGER  PRIMARY KEY AUTOINCREMENT," +
                     "Descripcion varchar(200)," +
                     "Division varchar(50)," +
-                    "CantidadEmpleados int" +
+                    "CantidadEmpleados INTEGER" +
                     ");"
         ) // fin de la creacion de la primer tabla
 

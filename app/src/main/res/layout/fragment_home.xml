@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="20dp"
-    tools:context=".ui.home.HomeFragment">
+    tools:context=".ui.home.HomeFragment"
+    android:id="@+id/homeFragment">
 
     <TextView
         android:layout_width="match_parent"
@@ -14,7 +15,8 @@
         android:text="Áreas de la Empresa"
         android:textAlignment="center"
         android:textSize="20dp"
-        android:textColor="@color/black"/>
+        android:textColor="@color/black"
+        android:id="@+id/lblArea"/>
 
 
     <EditText
@@ -67,17 +69,18 @@
         android:orientation="horizontal">
 
         <RadioButton
-            android:id="@+id/rbtnDivisionFH"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="50dp"
-            android:text="Divisíon" />
-
-        <RadioButton
             android:id="@+id/rbtnDescripcionFH"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Descripción" />
+
+        <RadioButton
+            android:id="@+id/rbtnDivisionFH"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:text="División" />
+
     </RadioGroup>
 
     <ListView

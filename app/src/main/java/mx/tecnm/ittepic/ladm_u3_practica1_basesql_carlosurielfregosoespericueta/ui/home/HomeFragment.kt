@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import mx.tecnm.ittepic.ladm_u3_practica1_basesql_carlosurielfregosoespericueta.Area
+import mx.tecnm.ittepic.ladm_u3_practica1_basesql_carlosurielfregosoespericueta.ShowAreas
 import mx.tecnm.ittepic.ladm_u3_practica1_basesql_carlosurielfregosoespericueta.UpdateArea
 import mx.tecnm.ittepic.ladm_u3_practica1_basesql_carlosurielfregosoespericueta.databinding.FragmentHomeBinding
 
@@ -35,46 +36,36 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        // desde aqui podemos codificar sin problema
-        requireContext().hideKeyboard(root)
-        mostrarDatosArea()
-        val buttonGroup = binding.RGbotonesBusquedaFH
-        buttonGroup.visibility = View.GONE
 
-        var contador = 0
+        // desde aqui podemos codificar sin problema
+        mostrarDatosArea()
         // ----------------- Inicio de los botones --------------------------------------------->
         binding.btnBuscarFH.setOnClickListener {
-            //val areas = Area(context)
-            if (binding.txtDesAreaFH.text.isEmpty() || binding.txtDivAreaFH.text.isEmpty()) {
-                AlertDialog.Builder(context).setTitle("Aviso!!")
-                    .setMessage("Tienes vcampos vacios...")
-                    .setPositiveButton("Ok") { _, _ -> }
+            if (binding.rbtnDescripcionFH.isChecked && binding.txtDesAreaFH.text.isNotEmpty()) {
+                val area =
+                    Area(context).mostrarAreaPorDescripcion(binding.txtDesAreaFH.text.toString())
+                AlertDialog.Builder(context).setTitle("Busqueda por ${area.division}")
+                    .setMessage("Descripcion del área:\n${area.descripcion}\nEmpleados del area: ${area.numEmpleados}")
                     .show()
-                binding.txtDesAreaFH.requestFocus()
-                requireContext().hideKeyboard(it)
-                return@setOnClickListener
             }
-
-            if (contador == 0) {
-                AlertDialog.Builder(context)
-                    .setMessage("Vuelva a presionar para elegir porque campo hacer la busqueda")
-                    .show()
-                contador += 1
-                buttonGroup.visibility = View.VISIBLE
-                return@setOnClickListener
-            }
-
+//            if (binding.rbtnDivisionFH.isChecked && binding.txtDivAreaFH.text.isNotEmpty()) {
+//            }
 
         } // fin del botón de consulta
+
         binding.btnInsertarFH.setOnClickListener {
             val area = Area(requireContext())
             area.descripcion = binding.txtDesAreaFH.text.toString()
             area.division = binding.txtDivAreaFH.text.toString()
             area.numEmpleados = binding.txtCantEmpFH.text.toString().toInt()
             val res = area.insertar()
-            if (res) Toast.makeText(context, "Área incertada correctamente", Toast.LENGTH_LONG)
-                .show()
-            else AlertDialog.Builder(context).setMessage(area.error).show()
+            if (res) {
+                Toast.makeText(context, "Área insertada correctamente", Toast.LENGTH_LONG)
+                    .show()
+                binding.txtCantEmpFH.setText("")
+                binding.txtDesAreaFH.setText("")
+                binding.txtDivAreaFH.setText("")
+            } else AlertDialog.Builder(context).setMessage(area.error).show()
             mostrarDatosArea()
         }
 
@@ -83,50 +74,60 @@ class HomeFragment : Fragment() {
         return root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onResume() {
-        mostrarDatosArea()
-        super.onResume()
-    }
-
-    fun Context.hideKeyboard(view: View) {
-        val inputMethodManager =
-            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-    }
-
     private fun mostrarDatosArea() {
         val vistaArea = Area(context).mostarAreas()
         val nombreAreas = ArrayList<String>()
         listaIDsArea.clear()
         repeat((0 until vistaArea.size).count()) {
             val ar = vistaArea[it]
-            listaIDsArea.add(ar.idArea)
-            nombreAreas.add(ar.division)
             nombreAreas.add(ar.descripcion)
+            listaIDsArea.add(ar.idArea)
         }
         binding.lvAreasFH.adapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, nombreAreas)
 
         binding.lvAreasFH.setOnItemClickListener { _, _, i, _ ->
             val areaIdList = listaIDsArea[i]
-            val areas = Area(context)
-            AlertDialog.Builder(context)
-                .setMessage("Que quieres hacer con el Área ${areas.division} ?")
+            val areas = Area(context).mostrarAreaPorId(areaIdList.toString())
+            AlertDialog.Builder(requireContext())
+                .setMessage("¿Que quieres hacer con el Área de ${areas.descripcion} ?")
                 .setPositiveButton("Eliminar") { _, _ ->
-                    areas.eliminar()
+                    if (areas.eliminar()) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Eliminado correctamente",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        mostrarDatosArea()
+                    } else
+                        AlertDialog.Builder(requireContext()).setTitle("Aviso!!")
+                            .setMessage(areas.error).show()
                     mostrarDatosArea()
+
                 }
                 .setNegativeButton("Modificar") { _, _ ->
-                    val otraVentana = Intent(context,UpdateArea::class.java)
+                    val otraVentana = Intent(requireContext(), UpdateArea::class.java)
+                    otraVentana.putExtra("IdExtra", areas.idArea)
+                    otraVentana.putExtra("descripcionExtra", areas.descripcion)
+                    otraVentana.putExtra("divisonExtra", areas.division)
+                    otraVentana.putExtra("empleadosExtra", areas.numEmpleados)
                     startActivity(otraVentana)
                 }
-                .setNeutralButton("Nada"){_,_, ->}
+                .setNeutralButton("Nada") { _, _ -> }
                 .show()
         }
+    } // fin del método mostrar datos
+
+
+    override fun onResume() {
+        mostrarDatosArea()
+        super.onResume()
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+
 }
